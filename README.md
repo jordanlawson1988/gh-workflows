@@ -31,3 +31,4 @@ Inputs:
 | `node-version`     | string  | `'22'`  | Node version for `actions/setup-node`   |
 | `run-typecheck`    | boolean | `true`  | Set `false` for repos with no `tsconfig.json` |
 | `run-build`        | boolean | `true`  | Set `false` for repos with no build script |
+| `working-directory` | string | `'.'`   | Set when the Node app lives in a subdirectory (e.g. `web`) |

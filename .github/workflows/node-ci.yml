@@ -11,13 +11,22 @@ on:
       run-build:
         type: boolean
         default: true
+      working-directory:
+        type: string
+        default: '.'
 jobs:
   ci:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ inputs.working-directory }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
-        with: {node-version: '${{ inputs.node-version }}', cache: npm}
+        with:
+          node-version: '${{ inputs.node-version }}'
+          cache: npm
+          cache-dependency-path: '${{ inputs.working-directory }}/package-lock.json'
       - run: npm ci
       - if: ${{ inputs.run-typecheck }}
         run: npx tsc --noEmit --pretty false
