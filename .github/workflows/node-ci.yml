@@ -1,0 +1,27 @@
+name: Node CI (reusable)
+on:
+  workflow_call:
+    inputs:
+      node-version:
+        type: string
+        default: '22'
+      run-typecheck:
+        type: boolean
+        default: true
+      run-build:
+        type: boolean
+        default: true
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: '${{ inputs.node-version }}', cache: npm}
+      - run: npm ci
+      - if: ${{ inputs.run-typecheck }}
+        run: npx tsc --noEmit --pretty false
+      - if: ${{ inputs.run-build }}
+        run: npm run build
+        env: {SKIP_ENV_VALIDATION: '1'}
+      - run: npm test --if-present
