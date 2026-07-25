@@ -14,6 +14,15 @@ on:
       working-directory:
         type: string
         default: '.'
+      build-env:
+        type: string
+        default: ''
+        description: >-
+          Newline-delimited KEY=VALUE pairs exported before `npm run build`.
+          Use dummy/non-secret values here only (e.g. a syntactically valid
+          but unreachable DATABASE_URL) to satisfy build-time env validation
+          that SKIP_ENV_VALIDATION doesn't cover. Never put real secrets here
+          — use `secrets: inherit` + repo secrets for those.
 jobs:
   ci:
     runs-on: ubuntu-latest
@@ -30,6 +39,8 @@ jobs:
       - run: npm ci
       - if: ${{ inputs.run-typecheck }}
         run: npx tsc --noEmit --pretty false
+      - if: ${{ inputs.run-build && inputs.build-env != '' }}
+        run: echo "${{ inputs.build-env }}" >> "$GITHUB_ENV"
       - if: ${{ inputs.run-build }}
         run: npm run build
         env: {SKIP_ENV_VALIDATION: '1'}

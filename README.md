@@ -32,3 +32,4 @@ Inputs:
 | `run-typecheck`    | boolean | `true`  | Set `false` for repos with no `tsconfig.json` |
 | `run-build`        | boolean | `true`  | Set `false` for repos with no build script |
 | `working-directory` | string | `'.'`   | Set when the Node app lives in a subdirectory (e.g. `web`) |
+| `build-env`         | string | `''`    | Newline-delimited `KEY=VALUE` dummy values exported before `npm run build`, for repos whose env validation isn't SKIP_ENV_VALIDATION-aware. Non-secret values only — real secrets go through `secrets: inherit` + repo secrets. |
